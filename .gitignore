@@ -1,0 +1,17 @@
+logs
+target
+bin
+.cache_main
+.cache_tests
+/.idea
+/.idea_modules
+/project/project
+/project/target
+/.classpath
+/.project
+/.settings
+/RUNNING_PID
+activator
+activator.bat
+activator-launch-1.3.7.jar
+
