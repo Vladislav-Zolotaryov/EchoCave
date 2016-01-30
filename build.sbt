@@ -1,16 +1,17 @@
 name := """EchoCave"""
-
 version := "1.0"
-
-lazy val root = (project in file(".")).enablePlugins(PlayScala)
+scalaVersion := "2.11.6"
 
 EclipseKeys.withSource := true
+routesGenerator := InjectedRoutesGenerator
 
-scalaVersion := "2.11.6"
+lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 libraryDependencies ++= Seq(
   jdbc,
   cache,
+  "org.mongodb.scala" %% "mongo-scala-driver" % "1.0.1",
+  "org.reactivemongo" %% "play2-reactivemongo" % "0.11.9",
   ws,
   specs2 % Test
 )
@@ -18,6 +19,6 @@ libraryDependencies ++= Seq(
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
 
-// Play provides two styles of routers, one expects its actions to be injected, the
-// other, legacy style, accesses its actions statically.
-routesGenerator := InjectedRoutesGenerator
+
+
+fork in run := true
