@@ -30,13 +30,11 @@ class ChatRoomActor extends Actor {
       )
 
       val iteratee = Iteratee.foreach[JsValue] { message =>
-        Logger.debug("Iteratee " + message.\("text").get.toString())
         self ! WriteMessage(user, message.\("text").get.toString())
       }
       sender ! (iteratee, enumerator)
 
     case WriteMessage(user, text) =>
-      Logger.debug("Wrote Message " + text)
       val msg = Message(user, text)
       chatRoom.write(msg)
       self ! Broadcast(msg)
@@ -46,7 +44,7 @@ class ChatRoomActor extends Actor {
       channel.push(msg)
 
     case _ =>
-      Logger.info("Received unknown message")
+      Logger.error("Received unknown message")
   }
 
 }

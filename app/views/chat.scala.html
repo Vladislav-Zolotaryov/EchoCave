@@ -22,7 +22,7 @@
                ws = new WebSocket("@routes.Chat.joinRoom().webSocketURL()");
 				
 			   ws.onopen = function() {
-			   		
+			   		onlineState()
 			   }
 			   
                ws.onmessage = function (evt) { 
@@ -34,7 +34,8 @@
                };
 				
                ws.onclose = function(closeCode) { 
-                  writeMessage("Connection is closed..."); 
+                  offlineState();
+                  writeMessage("Connection is closed...");
                   setTimeout(function () {
                   	writeMessage("Trying to reconnect..."); 
         			webSocketInit(); 
@@ -58,6 +59,25 @@
        		ws.send('{"text": "'+input.value+'"}');
        }
        
+       function offlineState() {
+       		clearState();
+       		$("#main-panel").addClass("panel-danger");
+       }
+       
+       function clearState() {
+      		var mainPanel = $("#main-panel");
+      		var classes = ["panel-default", "panel-success", "panel-danger"]
+      		$.each(classes, function( index, value ) {
+  				mainPanel.removeClass(value);
+			});
+       		
+       }
+       
+       function onlineState() {
+       		clearState();
+       		$("#main-panel").addClass("panel-success");
+       }
+       
        $( document ).ready(function() {
     		webSocketInit();
 	   });
@@ -67,7 +87,7 @@
    <div class="container">
 	   <div class="row">
 	        <div class="col-md-8 col-md-offset-2">
-	    		<div class="panel panel-default">
+	    		<div id="main-panel" class="panel panel-default">
 	                <div class="panel-heading"><strong>Chat</strong></div>
 	                <div id="chat-panel" class="panel-body" style="height: 400px; overflow: auto;">
 				      		<div id="chat-messages" class="col-sm-12"></div>
