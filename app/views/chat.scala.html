@@ -1,0 +1,83 @@
+@(implicit request: RequestHeader)
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<script type="text/javascript" 
+  src="@routes.Assets.versioned("jquery/jquery-1.12.0.js")"></script>  
+<link rel="stylesheet" 
+  href="@routes.Assets.versioned("bootstrap/css/bootstrap.css")">
+<script type="text/javascript" 
+  src="@routes.Assets.versioned("bootstrap/js/bootstrap.js")"></script>
+
+	<script type="text/javascript">
+		var ws;
+		
+        function webSocketInit() {
+            if ("WebSocket" in window) {
+               
+               ws = new WebSocket("@routes.Chat.joinRoom().webSocketURL()");
+				
+			   ws.onopen = function() {
+			   		
+			   }
+			   
+               ws.onmessage = function (evt) { 
+                  var received = JSON.parse(evt.data);
+                  var timestamp = received.timestamp;
+                  var username = received.user;
+                  var message = received.message;
+                  writeMessage("["+timestamp+"] " + "<strong>"+username+":</strong>" + " " + message);
+               };
+				
+               ws.onclose = function(closeCode) { 
+                  writeMessage("Connection is closed..."); 
+                  setTimeout(function () {
+                  	writeMessage("Trying to reconnect..."); 
+        			webSocketInit(); 
+    			  }, 10*1000);
+               };
+               
+            }            
+            else {
+               alert("WebSocket NOT supported by your Browser!");
+            }
+       }
+       
+       function writeMessage(text) {
+       		var chatMessages = $("#chat-messages");
+       		chatMessages.append(text + "<BR>");
+			$("#chat-panel").scrollTop(chatMessages.outerHeight());
+       }
+       
+       function sendMessage() {
+       		var input = document.getElementById("input-message");
+       		ws.send('{"text": "'+input.value+'"}');
+       }
+       
+       $( document ).ready(function() {
+    		webSocketInit();
+	   });
+    </script>
+
+   <body>
+   <div class="container">
+	   <div class="row">
+	        <div class="col-md-8 col-md-offset-2">
+	    		<div class="panel panel-default">
+	                <div class="panel-heading"><strong>Chat</strong></div>
+	                <div id="chat-panel" class="panel-body" style="height: 400px; overflow: auto;">
+				      		<div id="chat-messages" class="col-sm-12"></div>
+					</div>  
+					 <div class="panel-footer" >
+							<input type="text" style="display: inline; width:90%" class="form-control" id="input-message">
+							<button type="submit" style="display: inline;" class="btn btn-primary" onclick="sendMessage()">Send</button>
+					 </div>	 
+			   </div>
+			</div>		      
+	   </div>
+   </body>
+<html>   

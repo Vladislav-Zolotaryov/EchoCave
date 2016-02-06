@@ -43,14 +43,9 @@ class ApplicationSpec extends Specification with DatabaseComponent {
       val resultObservable = User.create(User("TEST_USER", "TEST_PASSWORD"))
       Await.ready(resultObservable, Duration(10, TimeUnit.SECONDS))
       
-      val observable = db.getCollection("User").find(and(equal("username", "TEST_USER"), equal("password", "TEST_PASSWORD")))
+      val result:Boolean = Await.result(User.authenticate("TEST_USER", "TEST_PASSWORD"), Duration(10, TimeUnit.SECONDS))
       
-      val result: Document = Await.result(observable.head(), Duration(10, TimeUnit.SECONDS))
-      
-      val user = Json.fromJson[User](result).get
-      
-      user.username must equalTo("TEST_USER")
-      user.password must equalTo("TEST_PASSWORD")
+      assert(result)
     }
 
     "send 404 on a bad request" in new WithApplication {
