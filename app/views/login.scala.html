@@ -13,13 +13,6 @@
 <script type="text/javascript" 
   src="@routes.Assets.versioned("bootstrap/js/bootstrap.js")"></script>
 
-<script>
-    function submitForm(action) {
-        document.getElementById('credentials-form').action = action;
-        document.getElementById('credentials-form').submit();
-    }
-</script>
-  
 <div class="container">  
     
 	@if(loginForm.hasErrors) {

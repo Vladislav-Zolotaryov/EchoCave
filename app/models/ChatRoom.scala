@@ -8,9 +8,11 @@ class ChatRoom(val messageTreshhold: Int = 50) {
   val messages = new ArrayBuffer[Message]
   
   def join(user:User) {
-    if (!(users contains user)) {
-      users += user
-    }
+    users += user
+  }
+  
+  def leave(user:User) {
+    users -= user
   }
   
   def write(message:Message) {

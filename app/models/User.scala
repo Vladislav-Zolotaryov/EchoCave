@@ -49,7 +49,7 @@ object User extends DatabaseComponent {
     } recover {
       case _ => false
     }
-  }
+  }  
   
   def collection():MongoCollection[Document] = {
     db.getCollection(COLLECTION_NAME)
