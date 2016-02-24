@@ -1,4 +1,4 @@
 TODO:
-*Registration check on server side if user is taken
-*Index constraint with uniqueness for username and db script to create Users collection
-*Add salt to password verification
+⋅⋅*Registration check on server side if user is taken
+⋅⋅*Index constraint with uniqueness for username and db script to create Users collection
+⋅⋅*Add salt to password verification
